@@ -1,10 +1,11 @@
-name: Staging deployment
+name: Stage the app
 
 on: 
   pull_request:
     types: [labeled]
+
 env:
-  DOCKER_IMAGE_NAME: DzmSrv-azure-ttt        
+  DOCKER_IMAGE_NAME: DzmSrv-azure-ttt
   IMAGE_REGISTRY_URL: docker.pkg.github.com
   #################################################
   ### USER PROVIDED VALUES ARE REQUIRED BELOW   ###
@@ -13,13 +14,13 @@ env:
   ### REPLACE USERNAME WITH GH USERNAME         ###
   AZURE_WEBAPP_NAME: DzmSrv-ttt-app
   #################################################
-    
+
 jobs:
   build:
+    if: contains(github.event.pull_request.labels.*.name, 'stage')
+
     runs-on: ubuntu-latest
 
-    if: contains(github.event.pull_request.labels.*.name, 'stage')
-    
     steps:
       - uses: actions/checkout@v1
       - name: npm install and build webpack
@@ -76,4 +77,3 @@ jobs:
       - name: Azure logout
         run: |
           az logout
-    
